@@ -8,8 +8,16 @@ var loadElement = document.createElement('span');
 loadElement.className = 'sr-only';
 
 var listElement = document.createElement('ul');
-listElement.className = 'list-group';
+listElement.className = 'list-group text-justify text-truncate text-wrap';
 containerElement.appendChild(listElement);
+
+btnElement.onclick = search;
+inpElement.addEventListener('keyup', event => {
+  if (event.keyCode === 13) {
+    event.preventDefault();
+    btnElement.click();
+  }
+});
 
 axios.interceptors.request.use(config => {
   spinnerElement.appendChild(loadElement);
@@ -20,17 +28,17 @@ axios.interceptors.request.use(config => {
   return Promise.reject(error);
 });
 
-btnElement.onclick = () => {
+function search() {
+  listElement.innerHTML = '';
+
   axios.get(`https://api.github.com/users/${inpElement.value}/repos`)
     .then(response => {
-      listElement.innerHTML = '';
       containerElement.removeChild(spinnerElement);
 
       for (repo of response.data)
         listItem(repo.name, repo.language);
     })
     .catch(error => {
-      listElement.innerHTML = '';
       containerElement.removeChild(spinnerElement);
 
       if (error.response.status === 404)
@@ -47,8 +55,8 @@ function listItem(str, num) {
   var spanElement = document.createElement('span');
 
   itemElement.className = 
-  'list-group-item d-flex justify-content-between align-items-center';
-  spanElement.className = 'badge badge-primary badge-pill';
+    'list-group-item d-flex justify-content-between align-items-center';
+  spanElement.className = 'ml-3 badge badge-primary badge-pill';
 
   var textElement = document.createTextNode(str);
   var numElement = document.createTextNode(num);
