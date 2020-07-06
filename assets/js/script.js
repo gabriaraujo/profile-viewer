@@ -1,68 +1,85 @@
-var inpElement = document.querySelector('input');
-var btnElement = document.querySelector('button');
-var containerElement = document.querySelector('.jumbotron');
+const api = axios.create({
+  baseURL: 'https://api.github.com/'
+});
 
-var spinnerElement = document.createElement('div');
-spinnerElement.className = 'spinner-border text-info';
-var loadElement = document.createElement('span');
-loadElement.className = 'sr-only';
+class Application {
+  constructor() {
+    this.containerEl = document.querySelector('.jumbotron');
+    this.inputEl = document.querySelector('input');
+    this.buttonEl = document.querySelector('button');
+    this.listEl = document.createElement('ul');
 
-var listElement = document.createElement('ul');
-listElement.className = 'list-group text-justify text-truncate text-wrap';
-containerElement.appendChild(listElement);
-
-btnElement.onclick = search;
-inpElement.addEventListener('keyup', event => {
-  if (event.keyCode === 13) {
-    event.preventDefault();
-    btnElement.click();
+    this.registerHandlers();
   }
-});
 
-axios.interceptors.request.use(config => {
-  spinnerElement.appendChild(loadElement);
-  containerElement.appendChild(spinnerElement);
+  registerHandlers() {
+    this.buttonEl.onclick = () => this.search();
+    this.inputEl.addEventListener('keyup', event => {
+      if (event.keyCode === 13) {
+        event.preventDefault();
+        this.buttonEl.click();
+      }
+    }) 
+  }
 
-  return config;
-}, error => {
-  return Promise.reject(error);
-});
+  setLoading(loading = true) {
+    if (loading) {
+      this.listEl.innerHTML = '';
 
-function search() {
-  listElement.innerHTML = '';
+      let spinnerEl = document.createElement('div');
+      spinnerEl.setAttribute('id', 'loading');
+      spinnerEl.className = 'spinner-border text-info';
+      
+      let loadingEl = document.createElement('span');
+      loadingEl.className = 'sr-only';
+      
+      spinnerEl.appendChild(loadingEl);
+      this.containerEl.appendChild(spinnerEl);
 
-  axios.get(`https://api.github.com/users/${inpElement.value}/repos`)
-    .then(response => {
-      containerElement.removeChild(spinnerElement);
+    } else
+      document.getElementById('loading').remove();
+  }
 
-      for (repo of response.data)
-        listItem(repo.name, repo.language);
-    })
-    .catch(error => {
-      containerElement.removeChild(spinnerElement);
+  async search() {
+    const username = this.inputEl.value;
+    if (!username) return;
 
-      if (error.response.status === 404)
-        alert('Usuário não encontrado!');
-      else
-        alert(error.message);
-    });
+    this.setLoading();
+    try {
+      const response = await api.get(`users/${username}/repos`);
 
-  inpElement.value = '';
-}
+      this.listEl.className = 'list-group text-justify text-truncate text-wrap';
+      this.containerEl.appendChild(this.listEl);
 
-function listItem(str, num) {
-  var itemElement = document.createElement('li');
-  var spanElement = document.createElement('span');
+      for (let repo of response.data)
+        this.addRepository(repo.name, repo.language);
 
-  itemElement.className = 
+      this.inputEl.value = '';
+
+    } catch (err) {
+      alert('Usuário não encontrado!');
+    }
+
+    this.setLoading(false);
+  }
+
+  addRepository(name, language) {
+    let itemEl = document.createElement('li');
+    let spanEl = document.createElement('span');
+
+    itemEl.className = 
     'list-group-item d-flex justify-content-between align-items-center';
-  spanElement.className = 'ml-3 badge badge-primary badge-pill';
+    spanEl.className = 'ml-3 badge badge-primary badge-pill';
 
-  var textElement = document.createTextNode(str);
-  var numElement = document.createTextNode(num);
+    let nameEl = document.createTextNode(name);
+    let languageEl = document.createTextNode(language);
 
-  spanElement.appendChild(numElement);
-  itemElement.appendChild(textElement);
-  itemElement.appendChild(spanElement);
-  listElement.appendChild(itemElement);
+    spanEl.appendChild(languageEl);
+    itemEl.appendChild(nameEl);
+    itemEl.appendChild(spanEl);
+
+    this.listEl.appendChild(itemEl);
+  }
 }
+
+new Application();
