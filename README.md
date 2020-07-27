@@ -27,7 +27,7 @@ Also, you can use this design as you want, it's free to copy, change and improve
 
 ## Built With
 - <a href="https://html.spec.whatwg.org" target="_blank">HTML</a> - Markup language for documents designed to be displayed in a web browser.
-- <a href="https://www.javascript.com" target="_blank">JavaScript</a> - Lightweight, interpreted, or just-in-time compiled programming language with first-class functions 
+- <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank">JavaScript</a> - Lightweight, interpreted, or just-in-time compiled programming language with first-class functions 
 that enables interactive web pages.
 - <a href="https://github.com/axios/axios" target="_blank">Axios</a> - Promise based HTTP client for the browser 
 and <a href="https://nodejs.org/en/" target="_blank">Node.js</a>.
