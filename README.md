@@ -4,6 +4,10 @@
 ## 📑 About this Project
 The idea for this project came about through a challenge proposed in one of the <a href="https://rocketseat.com.br">Rocketseat</a> classes.
 
+## 📚 Functionality
+- Lists all public repositories of a GitHub user.
+- Indicates the main language of each listed repository.
+
 ## 💡 Why?
 This project is part of my personal portfolio and I would be very happy to receive feedback on the project, code, structure, anything that can make me a better developer!
 
@@ -11,10 +15,6 @@ E-mail: <a href="mailto:gabrielcaetanodm@gmail.com">gabrielcaetanodm@gmail.com</
 LinkedIn: <a href="https://www.linkedin.com/in/gabrielcaetanodm/" target="_blank">gabrielcaetanodm</a>
 
 Also, you can use this design as you want, it's free to copy, change and improve.
-
-## 📚 Functionality
-- Lists all public repositories of a GitHub user.
-- Indicates the main language of each listed repository.
 
 ## 📥 How to use
 - Access the project page through the link <a href="https://gabriaraujo.github.io/profile-viewer/" target="_blank">gabriaraujo.github.io/profile-viewer/</a>.
